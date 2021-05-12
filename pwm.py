@@ -2,10 +2,15 @@
 import time
 from machine import Pin, PWM
 
-pwm = PWM( Pin( 25 ) )
-pwm.freq( 1000 )
+pwm = [0, 0]
+pwm[0] = PWM( Pin( 25 ) )
+pwm[0].freq( 1000 )
+pwm[1] = PWM( Pin( 16 ) )
+pwm[1].freq( 1000 )
 duty = 0
 direction = 50
+
+sw = Pin( 17, Pin.IN )
 
 while True:
 	duty += direction
@@ -16,5 +21,8 @@ while True:
 		duty = 0
 		direction = 50
 
-	pwm.duty_u16( duty )
+	if( sw.value() == 0 ):
+		pwm[0].duty_u16( duty )
+	else:
+		pwm[1].duty_u16( duty )
 	time.sleep( 0.001 )
